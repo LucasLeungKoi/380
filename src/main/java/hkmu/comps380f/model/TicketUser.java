@@ -13,6 +13,7 @@ public class TicketUser {
     private String password;
     private String phone;
     private String email;
+    private String desc;
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER,
             cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserRole> roles = new ArrayList<>();
@@ -54,6 +55,13 @@ public class TicketUser {
     }
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 
     public List<UserRole> getRoles() {

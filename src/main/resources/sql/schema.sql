@@ -24,6 +24,7 @@ CREATE TABLE users (
    password VARCHAR(50) NOT NULL,
    phone VARCHAR(50) NOT NULL,
    email VARCHAR(50) NOT NULL,
+   desc VARCHAR(255),
    PRIMARY KEY (username)
 );
 CREATE TABLE user_roles (

@@ -10,7 +10,7 @@
   <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form>
 
-<h2>Ticket #${ticketId}: <c:out value="${ticket.subject}"/></h2>
+<h2>User: <c:out value="${ticket.customerName}"/></h2>
 
 <security:authorize access="hasRole('ADMIN') or principal.username=='${ticket.customerName}'">
   [<a href="<c:url value="/ticket/edit/${ticket.id}" />">Edit</a>]

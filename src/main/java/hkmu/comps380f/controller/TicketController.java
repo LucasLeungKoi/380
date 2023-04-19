@@ -29,6 +29,9 @@ public class TicketController {
     @Resource
     private TicketService tService;
 
+    @Resource
+    private TicketService aService;
+
     // Controller methods, Form-backing object, ...
     @GetMapping(value = {"", "/list"})
     public String list(ModelMap model) {
@@ -99,6 +102,16 @@ public class TicketController {
         return "view";
     }
 
+    @GetMapping("/profile/{ticketId}")
+    public String profile(@PathVariable("ticketId") long ticketId,
+                       ModelMap model)
+            throws TicketNotFound {
+        Ticket ticket = tService.getTicket(ticketId);
+        model.addAttribute("ticketId", ticketId);
+        model.addAttribute("ticket", ticket);
+        return "profile";
+    }
+
     @GetMapping("/{ticketId}/attachment/{attachment:.+}")
     public View download(@PathVariable("ticketId") long ticketId,
                          @PathVariable("attachment") UUID attachmentId)
@@ -155,14 +168,14 @@ public class TicketController {
                 form.getBody(), form.getAttachments());
         return "redirect:/ticket/view/" + ticketId;
     }
-    /*
+
     @GetMapping("/comment/{ticketId}/{attachmentId}")
     public ModelAndView showComment(@PathVariable("ticketId") long ticketId,
                                     @PathVariable ("attachmentId") UUID attachmentId,
                                     Principal principal, HttpServletRequest request)
             throws TicketNotFound, AttachmentNotFound {
         Ticket ticket = tService.getTicket(ticketId);
-        Attachment attachment = aService.getAttachment(ticketId,attachmentId);
+        Attachment attachment = tService.getAttachment(ticketId,attachmentId);
         if (ticket == null
                 || (!request.isUserInRole("ROLE_ADMIN")
                 && !principal.getName().equals(ticket.getCustomerName()))) {
@@ -173,14 +186,14 @@ public class TicketController {
         modelAndView.addObject("attachment", attachment);
         Form ticketForm = new Form();
         ticketForm.setSubject(ticket.getSubject());
-        ticketForm.setBody(attachment.getComments().toString());
+        ticketForm.setBody(ticket.getBody());
         modelAndView.addObject("ticketForm", ticketForm);
         return modelAndView;
     }
 
-     */
-/*
-    @PostMapping("/comment/{ticketId}")
+
+
+    @PostMapping("/comment/{ticketId}/{attachmentId}")
     public String comment(@PathVariable("ticketId") long ticketId, Form form,
                        Principal principal, HttpServletRequest request)
             throws IOException, TicketNotFound {
@@ -195,7 +208,7 @@ public class TicketController {
         return "redirect:/ticket/view/" + ticketId;
     }
 
- */
+
 
     @ExceptionHandler({TicketNotFound.class, AttachmentNotFound.class})
     public ModelAndView error(Exception e) {
