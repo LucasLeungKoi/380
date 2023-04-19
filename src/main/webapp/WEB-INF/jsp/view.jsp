@@ -25,10 +25,17 @@
 <c:if test="${!empty ticket.attachments}">
     Attachments:
     <c:forEach items="${ticket.attachments}" var="attachment" varStatus="status">
-        <c:if test="${!status.first}">, </c:if>
+        <br/>
+        <c:if test="${!status.first}"><!--,--> </c:if>
+        <img src="<c:url value="/ticket/${ticketId}/attachment/${attachment.id}"/>" alt="cat?" style="width:200px;height:200px;">
+        <!--
+        <br/>
         <a href="<c:url value="/ticket/${ticketId}/attachment/${attachment.id}" />">
             <c:out value="${attachment.name}"/></a>
+        -->
         [<a href="<c:url value="/ticket/${ticketId}/delete/${attachment.id}" />">Delete</a>]
+        [<a href="<c:url value="/ticket/comment/${ticket.id}/${attachment.id}" />">Edit Comment</a>]
+
     </c:forEach><br/><br/>
 </c:if>
 <a href="<c:url value="/ticket" />">Return to list tickets</a>

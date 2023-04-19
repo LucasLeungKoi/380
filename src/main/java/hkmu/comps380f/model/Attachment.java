@@ -2,7 +2,11 @@ package hkmu.comps380f.model;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -29,6 +33,8 @@ public class Attachment {
     @ManyToOne
     @JoinColumn(name = "ticket_id")
     private Ticket ticket;
+
+
 
     // getters and setters of all properties
     public UUID getId() {
@@ -78,5 +84,9 @@ public class Attachment {
     public void setTicket(Ticket ticket) {
         this.ticket = ticket;
     }
+
+
+
+
 }
 

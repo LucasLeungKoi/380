@@ -18,7 +18,7 @@
     <c:otherwise>
         <table>
             <tr>
-                <th>Username</th><th>Password</th><th>Roles</th><th>Action</th>
+                <th>Username</th><th>Password</th><th>Roles</th><th>Phone</th><th>Email</th><th>Action</th>
             </tr>
             <c:forEach items="${ticketUsers}" var="user">
                 <tr>
@@ -30,6 +30,8 @@
                             ${role.role}
                         </c:forEach>
                     </td>
+                    <td>${user.phone}</td>
+                    <td>${user.email}</td>
                     <td>
                         [<a href="<c:url value="/user/delete/${user.username}" />">Delete</a>]
                     </td>

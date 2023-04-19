@@ -26,8 +26,8 @@ public class UserManagementService {
         tuRepo.delete(ticketUser);
     }
     @Transactional
-    public void createTicketUser(String username, String password, String[] roles) {
-        TicketUser user = new TicketUser(username, password, roles);
+    public void createTicketUser(String username, String password, String phone, String email, String[] roles) {
+        TicketUser user = new TicketUser(username, password, phone, email, roles);
         tuRepo.save(user);
     }
 }

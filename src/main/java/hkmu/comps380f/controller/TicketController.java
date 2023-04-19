@@ -4,6 +4,7 @@ import hkmu.comps380f.dao.TicketService;
 import hkmu.comps380f.exception.AttachmentNotFound;
 import hkmu.comps380f.exception.TicketNotFound;
 import hkmu.comps380f.model.Attachment;
+import hkmu.comps380f.model.Comment;
 import hkmu.comps380f.model.Ticket;
 import hkmu.comps380f.view.DownloadingView;
 import jakarta.annotation.Resource;
@@ -45,6 +46,8 @@ public class TicketController {
         private String body;
         private List<MultipartFile> attachments;
 
+        private String comment;
+
         // Getters and Setters of customerName, subject, body, attachments
         public String getSubject() {
             return subject;
@@ -68,6 +71,14 @@ public class TicketController {
 
         public void setAttachments(List<MultipartFile> attachments) {
             this.attachments = attachments;
+        }
+
+        public String getComment() {
+            return comment;
+        }
+
+        public void setComment(String comment) {
+            this.comment = comment;
         }
     }
 
@@ -144,6 +155,47 @@ public class TicketController {
                 form.getBody(), form.getAttachments());
         return "redirect:/ticket/view/" + ticketId;
     }
+    /*
+    @GetMapping("/comment/{ticketId}/{attachmentId}")
+    public ModelAndView showComment(@PathVariable("ticketId") long ticketId,
+                                    @PathVariable ("attachmentId") UUID attachmentId,
+                                    Principal principal, HttpServletRequest request)
+            throws TicketNotFound, AttachmentNotFound {
+        Ticket ticket = tService.getTicket(ticketId);
+        Attachment attachment = aService.getAttachment(ticketId,attachmentId);
+        if (ticket == null
+                || (!request.isUserInRole("ROLE_ADMIN")
+                && !principal.getName().equals(ticket.getCustomerName()))) {
+            return new ModelAndView(new RedirectView("/ticket/list", true));
+        }
+        ModelAndView modelAndView = new ModelAndView("comment");
+        modelAndView.addObject("ticket", ticket);
+        modelAndView.addObject("attachment", attachment);
+        Form ticketForm = new Form();
+        ticketForm.setSubject(ticket.getSubject());
+        ticketForm.setBody(attachment.getComments().toString());
+        modelAndView.addObject("ticketForm", ticketForm);
+        return modelAndView;
+    }
+
+     */
+/*
+    @PostMapping("/comment/{ticketId}")
+    public String comment(@PathVariable("ticketId") long ticketId, Form form,
+                       Principal principal, HttpServletRequest request)
+            throws IOException, TicketNotFound {
+        Ticket ticket = tService.getTicket(ticketId);
+        if (ticket == null
+                || (!request.isUserInRole("ROLE_ADMIN")
+                && !principal.getName().equals(ticket.getCustomerName()))) {
+            return "redirect:/ticket/list";
+        }
+        tService.updateTicket(ticketId, form.getSubject(),
+                form.getBody(), form.getAttachments());
+        return "redirect:/ticket/view/" + ticketId;
+    }
+
+ */
 
     @ExceptionHandler({TicketNotFound.class, AttachmentNotFound.class})
     public ModelAndView error(Exception e) {

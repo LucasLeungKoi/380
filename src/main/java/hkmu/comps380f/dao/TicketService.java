@@ -1,8 +1,10 @@
 package hkmu.comps380f.dao;
 
 import hkmu.comps380f.exception.AttachmentNotFound;
+import hkmu.comps380f.exception.CommentNotFound;
 import hkmu.comps380f.exception.TicketNotFound;
 import hkmu.comps380f.model.Attachment;
+import hkmu.comps380f.model.Comment;
 import hkmu.comps380f.model.Ticket;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,10 @@ public class TicketService {
 
     @Resource
     private AttachmentRepository aRepo;
+
+    @Resource
+    private CommentRepository cRepo;
+
 
     @Transactional
     public List<Ticket> getTickets() {
@@ -49,6 +55,26 @@ public class TicketService {
         }
         return attachment;
     }
+/*
+    @Transactional
+    public Comment getComment(long ticketId, UUID attachmentId, String commentId)
+            throws TicketNotFound, AttachmentNotFound, CommentNotFound {
+        Ticket ticket = tRepo.findById(ticketId).orElse(null);
+        if (ticket == null) {
+            throw new TicketNotFound(ticketId);
+        }
+        Attachment attachment = aRepo.findById(attachmentId).orElse(null);
+        if (attachment == null) {
+            throw new AttachmentNotFound(attachmentId);
+        }
+        Comment comment  = cRepo.findById(commentId).orElse(null);
+        if (comment == null) {
+            throw new CommentNotFound(commentId);
+        }
+        return comment;
+    }
+
+ */
 
     @Transactional(rollbackFor = TicketNotFound.class)
     public void delete(long id) throws TicketNotFound {
@@ -75,6 +101,34 @@ public class TicketService {
         }
         throw new AttachmentNotFound(attachmentId);
     }
+/*
+    @Transactional(rollbackFor = CommentNotFound.class)
+    public void deleteComment(long ticketId, UUID attachmentId, String comments)
+            throws TicketNotFound, AttachmentNotFound, CommentNotFound {
+        Ticket ticket = tRepo.findById(ticketId).orElse(null);
+        if (ticket == null) {
+            throw new TicketNotFound(ticketId);
+        }
+        for (Attachment attachment : ticket.getAttachments()) {
+            for (Comment comment : attachment.getComments()) {
+                if (comment.getComment().equals(comments)) {
+                    attachment.deleteComment(comment);
+                    tRepo.save(ticket);
+                    return;
+                }
+            if (attachment.getId().equals(attachmentId)) {
+                ticket.deleteAttachment(attachment);
+                tRepo.save(ticket);
+                return;
+            }
+        }
+        throw new AttachmentNotFound(attachmentId);
+
+
+        }
+    }
+
+ */
 
     @Transactional
     public long createTicket(String customerName, String subject,
@@ -84,6 +138,7 @@ public class TicketService {
         ticket.setCustomerName(customerName);
         ticket.setSubject(subject);
         ticket.setBody(body);
+
 
         for (MultipartFile filePart : attachments) {
             Attachment attachment = new Attachment();
@@ -117,6 +172,7 @@ public class TicketService {
             attachment.setName(filePart.getOriginalFilename());
             attachment.setMimeContentType(filePart.getContentType());
             attachment.setContents(filePart.getBytes());
+            //attachment.setComments((List<Comment>) filePart.getInputStream());
             attachment.setTicket(updatedTicket);
             if (attachment.getName() != null && attachment.getName().length() > 0
                     && attachment.getContents() != null
