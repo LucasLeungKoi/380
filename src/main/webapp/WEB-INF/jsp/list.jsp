@@ -26,7 +26,7 @@
       Ticket ${entry.id}:
       <a href="<c:url value="/ticket/view/${entry.id}" />">
         <c:out value="${entry.subject}"/></a>
-      (customer: <a href="<c:url value="/ticket/profile/${entry.id}" />"><c:out value="${entry.customerName}"/></a>)
+      (customer: <a href="<c:url value="/ticket/profile/${entry.customerName}" />"><c:out value="${entry.customerName}"/></a>)
 
       <security:authorize access="hasRole('ADMIN') or principal.username=='${entry.customerName}'">
         [<a href="<c:url value="/ticket/edit/${entry.id}" />">Edit</a>]

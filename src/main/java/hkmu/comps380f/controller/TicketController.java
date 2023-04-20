@@ -102,13 +102,13 @@ public class TicketController {
         return "view";
     }
 
-    @GetMapping("/profile/{ticketId}")
-    public String profile(@PathVariable("ticketId") long ticketId,
+    @GetMapping("/profile/{customerName}")
+    public String profile(@PathVariable("customerName") String customerName,
                        ModelMap model)
             throws TicketNotFound {
-        Ticket ticket = tService.getTicket(ticketId);
-        model.addAttribute("ticketId", ticketId);
-        model.addAttribute("ticket", ticket);
+        List<Ticket> tickets = tService.getTickets();
+        model.addAttribute("tickets", tickets);
+        model.addAttribute("customerName", customerName);
         return "profile";
     }
 
