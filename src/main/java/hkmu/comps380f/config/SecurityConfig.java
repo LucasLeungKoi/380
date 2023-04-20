@@ -16,7 +16,8 @@ public class SecurityConfig {
             throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/user/**").hasRole("ADMIN")
+                        .requestMatchers("/user/list").hasRole("ADMIN")
+                        .requestMatchers("/user/create").hasAnyRole("USER","ADMIN")
                         .requestMatchers("/ticket/delete/**").hasRole("ADMIN")
                         .requestMatchers("/ticket/**").hasAnyRole("USER", "ADMIN")
                         .anyRequest().permitAll()

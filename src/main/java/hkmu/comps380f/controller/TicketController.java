@@ -1,11 +1,13 @@
 package hkmu.comps380f.controller;
 
 import hkmu.comps380f.dao.TicketService;
+import hkmu.comps380f.dao.UserManagementService;
 import hkmu.comps380f.exception.AttachmentNotFound;
 import hkmu.comps380f.exception.TicketNotFound;
 import hkmu.comps380f.model.Attachment;
 import hkmu.comps380f.model.Comment;
 import hkmu.comps380f.model.Ticket;
+import hkmu.comps380f.model.TicketUser;
 import hkmu.comps380f.view.DownloadingView;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,7 +32,7 @@ public class TicketController {
     private TicketService tService;
 
     @Resource
-    private TicketService aService;
+    private UserManagementService umService;
 
     // Controller methods, Form-backing object, ...
     @GetMapping(value = {"", "/list"})
@@ -107,8 +109,10 @@ public class TicketController {
                        ModelMap model)
             throws TicketNotFound {
         List<Ticket> tickets = tService.getTickets();
+        List<TicketUser> ticketUsers = umService.getTicketUsers();
         model.addAttribute("tickets", tickets);
         model.addAttribute("customerName", customerName);
+        model.addAttribute("ticketUsers", ticketUsers);
         return "profile";
     }
 

@@ -10,7 +10,7 @@
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form>
 
-<h2>Ticket #${ticketId}: <c:out value="${ticket.subject}"/></h2>
+<h2>Photo #${ticketId}: <c:out value="${ticket.subject}"/></h2>
 
 <security:authorize access="hasRole('ADMIN') or principal.username=='${ticket.customerName}'">
     [<a href="<c:url value="/ticket/edit/${ticket.id}" />">Edit</a>]
@@ -20,10 +20,8 @@
 </security:authorize>
 
 <br/><br/>
-<i>Customer Name - <c:out value="${ticket.customerName}"/></i><br/><br/>
-<c:out value="${ticket.body}"/><br/><br/>
 <c:if test="${!empty ticket.attachments}">
-    Attachments:
+    Photo:
     <c:forEach items="${ticket.attachments}" var="attachment" varStatus="status">
         <br/>
         <c:if test="${!status.first}"><!--,--> </c:if>
@@ -31,13 +29,19 @@
         <!--
         <br/>
         <a href="<c:url value="/ticket/${ticketId}/attachment/${attachment.id}" />">
-            <c:out value="${attachment.name}"/></a>
+        <c:out value="${attachment.name}"/></a>
         -->
-        [<a href="<c:url value="/ticket/${ticketId}/delete/${attachment.id}" />">Delete</a>]
+        <br/>
+        [<a href="<c:url value="/ticket/${ticketId}/delete/${attachment.id}" />">Delete photo</a>]
         [<a href="<c:url value="/ticket/comment/${ticket.id}/${attachment.id}" />">Edit Comment</a>]
 
     </c:forEach><br/><br/>
 </c:if>
+
+Description:
+<c:out value="${ticket.body}"/><br/>
+User <i><a href="<c:url value="/ticket/profile/${ticket.customerName}" />"><c:out value="${ticket.customerName}"/></a></i> uploaded the photo.<br/><br/>
+
 <a href="<c:url value="/ticket" />">Return to list tickets</a>
 </body>
 </html>
