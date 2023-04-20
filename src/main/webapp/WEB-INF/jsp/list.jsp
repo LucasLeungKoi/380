@@ -15,7 +15,7 @@
 <security:authorize access="hasRole('ADMIN')">
   <a href="<c:url value="/user" />">Manage User Accounts</a><br /><br />
 </security:authorize>
-<a href="<c:url value="/user/create" />">Create account</a><br />
+
 <a href="<c:url value="/ticket/create" />">Upload new photo</a><br/><br/>
 <c:choose>
   <c:when test="${fn:length(ticketDatabase) == 0}">

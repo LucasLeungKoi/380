@@ -1,6 +1,7 @@
 package hkmu.comps380f.controller;
 
 import hkmu.comps380f.dao.TicketService;
+import hkmu.comps380f.dao.TicketUserService;
 import hkmu.comps380f.dao.UserManagementService;
 import hkmu.comps380f.exception.AttachmentNotFound;
 import hkmu.comps380f.exception.TicketNotFound;
@@ -33,6 +34,8 @@ public class TicketController {
 
     @Resource
     private UserManagementService umService;
+    @Resource
+    private TicketUserService tUserService;
 
     // Controller methods, Form-backing object, ...
     @GetMapping(value = {"", "/list"})
@@ -158,6 +161,7 @@ public class TicketController {
         modelAndView.addObject("ticketForm", ticketForm);
         return modelAndView;
     }
+
     @PostMapping("/edit/{ticketId}")
     public String edit(@PathVariable("ticketId") long ticketId, Form form,
                        Principal principal, HttpServletRequest request)
@@ -171,6 +175,39 @@ public class TicketController {
         tService.updateTicket(ticketId, form.getSubject(),
                 form.getBody(), form.getAttachments());
         return "redirect:/ticket/view/" + ticketId;
+    }
+
+    @GetMapping("/profile/{user}/edit")
+    public ModelAndView showEditProfile(@PathVariable("user") String user,
+                                 Principal principal, HttpServletRequest request)
+            throws TicketNotFound {
+        List<TicketUser> ticketUsers = umService.getTicketUsers();
+        for(TicketUser ticketUser : ticketUsers){
+            if(ticketUser.getUsername().equals(user)){
+                ModelAndView modelAndView = new ModelAndView("editProfile");
+                modelAndView.addObject("ticketUser", ticketUser);
+                Form ticketForm = new Form();
+                ticketForm.setBody(ticketUser.getDesc());
+                modelAndView.addObject("ticketForm", ticketForm);
+                return modelAndView;
+            }
+        }
+        return null;
+    }
+
+    @PostMapping("/profile/{user}/edit")
+    public String editProfile(@PathVariable("user") String user, Form form,
+                       Principal principal, HttpServletRequest request)
+            throws IOException, TicketNotFound {
+
+        List<TicketUser> ticketUsers = umService.getTicketUsers();
+
+        for(TicketUser ticketUser:ticketUsers){
+
+        }
+
+        tUserService.updateDescription(user, form.getBody());
+        return "redirect:/ticket/profile/" + user;
     }
 
     @GetMapping("/comment/{ticketId}/{attachmentId}")

@@ -15,6 +15,10 @@
     <c:forEach items="${ticketUsers}" var="ticketUser" varStatus="status">
       <c:if test="${customerName==ticketUser.username}">
         <h2>User Desc: <c:out value="${ticketUser.desc}"/></h2>
+        <security:authorize access="hasRole('ADMIN') or principal.username=='${ticketUser.username}'">
+          [<a href="<c:url value="/ticket/profile/${ticketUser.username}/edit" />">Edit Desc</a>]
+        </security:authorize>
+        <br/>
       </c:if>
     </c:forEach>
   </c:if>
